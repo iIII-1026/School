@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aizhixin.school.mapper.UserMapper">
+
+
+    <update id="removeBatch">
+        delete FROM t_user
+        where id in
+        <foreach item="item" index="index" collection="array"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <select id="getUserList" parameterType="com.aizhixin.school.dto.UserPageDTO" resultType="com.aizhixin.school.vo.UserPageVO">
+        SELECT	tu.card, tu.`name`, tt.type_name, tu.phone, tu.create_time, tu.expiry, tu.state, tt.remark
+        FROM t_user tu
+        JOIN t_type tt ON tu.type_id = tt.id
+        <where>
+            <if test="userPageDTO.name != null and userPageDTO.name != ''">
+                `name` LIKE CONCAT('%', CONCAT(#{userPageDTO.name}, '%'))
+            </if>
+
+            <if test="userPageDTO.typeName != null and userPageDTO.typeName != ''">
+                AND
+                type_name = #{userPageDTO.typeName}
+            </if>
+
+            <if test="userPageDTO.expiry != null and userPageDTO.expiry != ''">
+                AND
+                expiry = #{userPageDTO.expiry}
+            </if>
+
+            <if test="userPageDTO.state != null ">
+                AND
+                state = #{userPageDTO.state}
+            </if>
+
+            <if test="userPageDTO.card != null and userPageDTO.card != ''">
+                AND
+                card = #{userPageDTO.card}
+            </if>
+
+            <if test="userPageDTO.openTime != null ">
+                AND
+                tu.create_time &gt;=#{userPageDTO.openTime}
+            </if>
+
+            <if test="userPageDTO.stopTime != null ">
+                AND
+                tu.create_time &lt;=#{userPageDTO.stopTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNumber" resultType="com.aizhixin.school.vo.NumberVO">
+        SELECT DISTINCT
+	        ( SELECT COUNT( `name` ) FROM t_user WHERE type_id = 1 OR type_id = 2) AS numberSchool,
+	        ( SELECT COUNT( id ) FROM t_access ) AS numberAccess,
+	        ( SELECT COUNT( 1 ) FROM t_user WHERE type_id = 1 AND state = 1 ) AS numberTeacher,
+	        ( SELECT COUNT( 1 ) FROM t_user WHERE type_id = 2 AND state = 1 ) AS numberStudent
+        FROM t_user
+    </select>
+
+    <select id="getMonthList" parameterType="com.aizhixin.school.dto.MonthDTO" resultType="com.aizhixin.school.vo.MonthVO">
+        SELECT MONTH(t_access.scan_code_time) 'month',
+        SUM(t_user.type_id = 1 OR t_user.type_id = 2 OR t_user.type_id = 4) totalNumber,
+        SUM(t_user.type_id = 1) teacherNumber,
+        SUM(t_user.type_id = 2) studentNumber,
+        SUM(t_user.type_id = 4) visitorNumber
+        FROM t_access
+        LEFT JOIN t_user ON t_access.user_id = t_user.id
+        LEFT JOIN t_qr ON t_access.qr_id = t_qr.id
+    <where>
+        <if test="monthDTO.gatewayId != null">
+            AND
+            t_access.qr_id = #{monthDTO.gatewayId}
+        </if>
+    </where>
+        GROUP BY MONTH(t_access.scan_code_time)
+    </select>
+    <select id="getTypeSelectList" resultType="com.aizhixin.school.vo.TypeSelectVO">
+        SELECT t_type.type_name typeName,
+        SUM(t_access.qr_id = 1) entrance1,
+        SUM(t_access.qr_id = 2) export1,
+        SUM(t_access.qr_id = 3) export2,
+        SUM(t_access.qr_id = 5) entrance2,
+        SUM(t_access.qr_id = 6) export3
+        FROM t_access
+        LEFT JOIN t_user ON t_access.user_id = t_user.id
+        LEFT JOIN t_qr ON t_access.qr_id = t_qr.id
+        LEFT JOIN t_type ON t_type.id = t_user.type_id
+        <where>
+        <if test="typeSelectDTO.startTime != null">
+            AND
+            t_access.scan_code_time &gt;= #{typeSelectDTO.startTime}
+        </if>
+        <if test="typeSelectDTO.stopTime != null">
+            AND
+            t_access.scan_code_time &lt;= #{typeSelectDTO.stopTime}
+        </if>
+        </where>
+        GROUP BY t_type.type_name
+    </select>
+    <select id="getHourList" resultType="com.aizhixin.school.vo.HourVO">
+        SELECT FLOOR(HOUR(t_access.scan_code_time)/2)*2 'hour',
+        SUM(t_access.qr_id = 1) entrance1,
+        SUM(t_access.qr_id = 2) export1,
+        SUM(t_access.qr_id = 3) export2,
+        SUM(t_access.qr_id = 5) entrance2,
+        SUM(t_access.qr_id = 6) export3
+        FROM t_access
+        LEFT JOIN t_user ON t_access.user_id = t_user.id
+        LEFT JOIN t_qr ON t_access.qr_id = t_qr.id
+        LEFT JOIN t_type ON t_type.id = t_user.type_id
+        GROUP BY FLOOR(HOUR(t_access.scan_code_time)/2)*2
+        ORDER BY HOUR(t_access.scan_code_time)
+    </select>
+</mapper>

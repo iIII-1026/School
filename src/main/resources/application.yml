@@ -1,0 +1,7 @@
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+
+#wechat:
+#  appid: $ {wx7fa962c9e357d54a}
+#    secret: $ {29b8712293dc85c4513a5df2271152ec}
+

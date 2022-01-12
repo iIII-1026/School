@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aizhixin.school.mapper.AccessMapper">
+
+    <select id="findAccessPage" parameterType="com.aizhixin.school.dto.AccessDTO" resultType="com.aizhixin.school.vo.AccessVO">
+	    SELECT tu.`name`, tu.card, tu.phone,ta.id,ta.user_id, ta.scan_code_time, tt.type_name, ta.qr_id, tq.pip, tq.c_type, tq.remark
+        FROM t_user tu
+		JOIN t_access ta ON tu.id = ta.user_id
+        JOIN t_type tt ON tu.type_id = tt.id
+        JOIN t_qr tq ON tq.id = ta.qr_id
+        <where>
+            <if test="accessDTO.name != null and accessDTO.name != ''">
+                `name` LIKE CONCAT('%', CONCAT(#{accessDTO.name}, '%'))
+            </if>
+
+            <if test="accessDTO.card != null and accessDTO.card != ''">
+                AND
+               card = #{accessDTO.card}
+            </if>
+
+            <if test="accessDTO.pip != null and accessDTO.pip != ''">
+                AND
+                pip = #{accessDTO.pip}
+            </if>
+
+            <if test="accessDTO.cType != null and accessDTO.cType != ''">
+                AND
+                c_type = #{accessDTO.cType}
+            </if>
+            <if test="accessDTO.openTime != null ">
+                AND
+                ta.scan_code_time &gt;=#{accessDTO.openTime}
+            </if>
+
+            <if test="accessDTO.stopTime != null ">
+                AND
+                ta.scan_code_time &lt;=#{accessDTO.stopTime}
+            </if>
+
+            <if test="accessDTO.typeName != null and accessDTO.typeName != ''">
+                AND
+                type_name = #{accessDTO.typeName}
+            </if>
+        </where>
+    </select>
+<!--    <select id="findQrByAccessId" resultType="com.aizhixin.school.domain.Qr">-->
+<!--        SELECT tq.pip, tq.c_type-->
+<!--        FROM t_qr tq LEFT JOIN t_access ta ON tq.id = ta.qr_id-->
+<!--    </select>-->
+</mapper>

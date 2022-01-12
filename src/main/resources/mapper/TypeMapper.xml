@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aizhixin.school.mapper.TypeMapper">
+
+
+<!--    <select id="getType" parameterType="com.aizhixin.school.dto.TypeDTO" resultType="com.aizhixin.school.vo.TypeVO">-->
+
+<!--    </select>-->
+    <select id="getTypeList" parameterType="com.aizhixin.school.dto.TypePageDTO" resultType="com.aizhixin.school.vo.TypeVO">
+        SELECT  tt.create_time, tt.id, tt.remark, tt.type_name, COUNT(1) total
+        FROM t_type tt
+        LEFT JOIN t_user tu ON tu.type_id = tt.id
+        <where>
+            <if test="typePageDTO.typeName != null and typePageDTO.typeName != ''">
+                type_name LIKE CONCAT('%', CONCAT(#{typePageDTO.typeName}, '%'))
+            </if>
+
+            <if test="typePageDTO.openTime != null ">
+                AND
+                tt.create_time &gt;=#{typePageDTO.openTime}
+            </if>
+
+            <if test="typePageDTO.stopTime != null ">
+                AND
+                tt.create_time &lt;=#{typePageDTO.stopTime}
+            </if>
+        </where>
+        GROUP BY tu.type_id
+    </select>
+</mapper>
