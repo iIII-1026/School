@@ -30,12 +30,12 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [//{
-    //         path: '/login',
-    //         component: () =>
-    //             import ('@/views/login/index'),
-    //         hidden: true
-    //     },
+export const constantRoutes = [{
+        path: '/login',
+        component: () =>
+            import ('@/views/login/index'),
+        hidden: true
+    },
     // 404模块
     // {
     //     path: '/404',
@@ -52,7 +52,7 @@ export const constantRoutes = [//{
             path: 'dashboard',
             name: 'Dashboard',
             component: () =>
-                import('@/views/dashboard/index'),
+                import ('@/views/dashboard/index'),
             meta: { title: '数据统计', icon: 'dashboard' }
         }]
     },
@@ -64,19 +64,19 @@ export const constantRoutes = [//{
         name: 'Example',
         meta: { title: '人员管理', icon: 'el-icon-user-solid' },
         children: [{
-            path: 'perinfo',
-            name: 'perinfo',
-            component: () =>
-                import('@/views/perinfo/index'),
-            meta: { title: '人员信息', icon: 'table' }
-        },
-        {
-            path: 'pertypemanage',
-            name: 'pertypemanage',
-            component: () =>
-                import('@/views/pertypemanage/index'),
-            meta: { title: '人员类型管理', icon: 'tree' }
-        }
+                path: 'perinfo',
+                name: 'perinfo',
+                component: () =>
+                    import ('@/views/perinfo/index'),
+                meta: { title: '人员信息', icon: 'table' }
+            },
+            {
+                path: 'pertypemanage',
+                name: 'pertypemanage',
+                component: () =>
+                    import ('@/views/pertypemanage/index'),
+                meta: { title: '人员类型管理', icon: 'tree' }
+            }
         ]
     },
     // 出入管理模块
@@ -90,19 +90,19 @@ export const constantRoutes = [//{
             icon: 'el-icon-s-help'
         },
         children: [{
-            path: 'accessrecord',
-            component: () =>
-                import('@/views/accessmanage/accessrecord/index'),
-            name: '出入记录',
-            meta: { title: '出入记录', icon: 'el-icon-document' },
-        },
-        {
-            path: 'accessconfig',
-            component: () =>
-                import('@/views/accessmanage/accessconfig/index'),
-            name: '出入配置',
-            meta: { title: '出入配置', icon: 'el-icon-edit-outline' }
-        },
+                path: 'accessrecord',
+                component: () =>
+                    import ('@/views/accessmanage/accessrecord/index'),
+                name: '出入记录',
+                meta: { title: '出入记录', icon: 'el-icon-document' },
+            },
+            {
+                path: 'accessconfig',
+                component: () =>
+                    import ('@/views/accessmanage/accessconfig/index'),
+                name: '出入配置',
+                meta: { title: '出入配置', icon: 'el-icon-edit-outline' }
+            },
 
         ]
     },
@@ -117,26 +117,26 @@ export const constantRoutes = [//{
             icon: 'el-icon-setting'
         },
         children: [{
-            path: 'rolemanage',
-            component: () =>
-                import('@/views/systemset/rolemanage/index'),
-            name: '角色管理',
-            meta: { title: '角色管理' },
-        },
-        {
-            path: 'powermanage',
-            component: () =>
-                import('@/views/systemset/powermanage/index'),
-            name: '权限管理',
-            meta: { title: '权限管理' }
-        },
-        {
-            path: 'accountmanage',
-            component: () =>
-                import('@/views/systemset/accountmanage/index'),
-            name: '账号管理',
-            meta: { title: '账号管理' }
-        },
+                path: 'rolemanage',
+                component: () =>
+                    import ('@/views/systemset/rolemanage/index'),
+                name: '角色管理',
+                meta: { title: '角色管理' },
+            },
+            {
+                path: 'powermanage',
+                component: () =>
+                    import ('@/views/systemset/powermanage/index'),
+                name: '权限管理',
+                meta: { title: '权限管理' }
+            },
+            {
+                path: 'accountmanage',
+                component: () =>
+                    import ('@/views/systemset/accountmanage/index'),
+                name: '账号管理',
+                meta: { title: '账号管理' }
+            },
 
         ]
     },
@@ -158,5 +158,7 @@ export function resetRouter() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher // reset router
 }
+
+
 
 export default router

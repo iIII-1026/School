@@ -6,12 +6,11 @@
       class="footerpage"
       background
       layout="sizes,prev, pager, next,total"
-      :page-sizes="[5, 10, 50, 100]"
+      :page-sizes="[10, 20, 50, 100, 500, 1000]"
       :page-size="10"
       :total="total"
     >
     </el-pagination>
-    <!-- <pagination v-bind:pagecount="pagecount"></pagination> -->
   </div>
 </template>
 
@@ -29,13 +28,11 @@ export default {
     // 切换页码
     handleCurrentChange(size) {
       this.$emit("handleSizeChange", size);
-
       console.log(`当前页: ${size}`);
     },
     // 切换每页显示的数量
     handleSizeChange(index) {
       this.$emit("handleCurrentChange", index);
-      //   this.pageIndex = index;
       console.log(`每页 ${index} 条`);
     },
   },
@@ -46,7 +43,7 @@ export default {
 
 <style lang='scss' scoped>
 .footerpage {
-  padding-top: 30%;
+  padding-top: 3%;
   text-align: center;
 }
 </style>

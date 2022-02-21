@@ -1,6 +1,10 @@
 import Vue from 'vue'
 
 import * as echarts from 'echarts'
+// import Blob from './vendor/Blob'
+// import Export2Excel from './vendor/Export2Excel.js'
+// import XLSX from 'xlsx'
+// Vue.use(XLSX)
 
 Vue.prototype.$echarts = echarts
 

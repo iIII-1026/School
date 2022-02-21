@@ -7,40 +7,51 @@
             <span>{{ formData.totalUser }}</span>
           </div>
           <span>累计管理校内总人数</span>
-        </div></el-col>
-      <el-col :span="6"><div class="grid-content bg-purple">
+        </div></el-col
+      >
+      <el-col :span="6"
+        ><div class="grid-content bg-purple">
           <div class="num">
             <span>{{ formData.totalServiceUser }}</span>
           </div>
           <span>累计服务出入人次</span>
-        </div></el-col>
-      <el-col :span="6"><div class="grid-content bg-purple">
+        </div></el-col
+      >
+      <el-col :span="6"
+        ><div class="grid-content bg-purple">
           <div class="num">
             <span>{{ formData.totalFaculty }}</span>
           </div>
           <span>当前管理教职工人数</span>
-        </div></el-col>
-      <el-col :span="6"><div class="grid-content bg-purple">
+        </div></el-col
+      >
+      <el-col :span="6"
+        ><div class="grid-content bg-purple">
           <div class="num">
             <span>{{ formData.totalStudent }}</span>
           </div>
           <span>当前管理学生人数</span>
-        </div></el-col>
+        </div></el-col
+      >
     </el-row>
     <el-row>
-      <el-col :span="12"><div class="grid-contents bg-purple">
-          <firstline></firstline></div>
-        </el-col>
+      <el-col :span="12"
+        ><div class="grid-contents bg-purple">
+          <firstline></firstline>
+        </div>
+      </el-col>
       <el-col :span="12">
         <div class="grid-contents bg-purple-light">
-          <secondline></secondline></div>
-        </el-col>
+          <secondline></secondline>
+        </div>
+      </el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
         <div class="grid-contents bg-purple-dark">
-          <thirdline></thirdline></div>
-        </el-col>
+          <thirdline></thirdline>
+        </div>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -59,35 +70,24 @@ export default {
   },
   data() {
     return {
-      formData:{},
-      totalNum: "123",
-      inoutNum: "321",
-      facultyNum: "231",
-      studentNum: "213",
+      formData: {},
     };
   },
-  mounted () {
-
-  },
-  created () {
-    this.getfinDataList()
+  mounted() {},
+  created() {
+    this.getfinDataList();
   },
   methods: {
     // 获取数据列表
-          getfinDataList(){
-            finData().then(res=>{
-              this.formData = res.data
-              console.log(res,'+++');
-            })
-          },
+    getfinDataList() {
+      finData().then((res) => {
+        this.formData = res.data;
+        // console.log(res, "+++");
+      });
+    },
   },
   mounted() {},
-  compunted: {
-    // totalNum() {},
-    // inoutNum() {},
-    // facultyNum() {},
-    // studentNum() {},
-  },
+  compunted: {},
 };
 </script>
 

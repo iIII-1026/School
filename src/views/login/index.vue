@@ -6,7 +6,8 @@
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
-      label-position="left">
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">校园健康出入管理平台</h3>
       </div>
@@ -49,7 +50,9 @@
         :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin">登录</el-button>
+        @click.native.prevent="handleLogin"
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -60,35 +63,39 @@ import { validUsername } from "@/utils/validate";
 export default {
   name: "Login",
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!validUsername(value)) {
-    //     callback(new Error('Please enter the correct user name'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-    // const validatePassword = (rule, value, callback) => {
-    //   if (value.length < 2) {
-    //     callback(new Error('The password can not be less than 6 digits'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
+    const validateUsername = (rule, value, callback) => {
+      if (!validUsername(value)) {
+        callback(new Error("Please enter the correct user name"));
+      } else {
+        callback();
+      }
+    };
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 2) {
+        callback(new Error("The password can not be less than 5 digits"));
+      } else {
+        callback();
+      }
+    };
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: "",
+        password: "",
       },
       loginRules: {
-        // username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        // password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-        username: [{ required: true, trigger: 'blur'}],
-        password: [{ required: true, trigger: 'blur'}]
+        username: [
+          { required: true, trigger: "blur", validator: validateUsername },
+        ],
+        password: [
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
+        username: [{ required: true, trigger: "blur" }],
+        password: [{ required: true, trigger: "blur" }],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   watch: {
     $route: {
@@ -113,17 +120,19 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch("user/login", this.loginForm).then(() => {
-            console.log('到了没');
-            this.$router.push({ path: '/dashboard' || '/'})
-            this.loading = false
-              })
-              .catch(() => {
-                this.loading = false;
-              });
-          } else {
-            console.log("error submit!!");
-            return false;
+          this.$store
+            .dispatch("user/login", this.loginForm)
+            .then(() => {
+              console.log("打印");
+              this.$router.push({ path: "/dashboard" || "/" });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
         }
       });
     },
@@ -132,9 +141,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
@@ -186,8 +192,8 @@ $light_gray: #eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background: url('../../assets/image/login.png') no-repeat;
-  background-size:100% 100%;
+  background: url("../../assets/image/login.png") no-repeat;
+  background-size: 100% 100%;
   overflow: hidden;
   overflow: hidden;
 

@@ -31,23 +31,22 @@ module.exports = {
     lintOnSave: process.env.NODE_ENV === 'development',
     productionSourceMap: false,
     devServer: {
-      port: port,
-      open: true,
-      overlay: {
-        warnings: false,
-        errors: true
-      },
-      proxy: {
-        // 配置跨域
-        [process.env.VUE_APP_BASE_API]: {
-          target: process.env.VUE_APP_SERVICE_URL,
-          changOrigin: true,
-          logLevel: 'debug',
-          pathRewrite: {
-            ['^' + process.env.VUE_APP_BASE_API]: ''
-          }
-        }
-      }
+        proxy: {
+            // 配置跨域 
+            '/api': {
+                target: 'http://192.168.44.63:9002',
+                changOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        },
+        port: port,
+        open: true,
+        overlay: {
+            warnings: false,
+            errors: true
+        },
     },
     configureWebpack: {
         // provide the app's title in webpack's name field, so that
@@ -124,7 +123,7 @@ module.exports = {
                                 }
                             }
                         })
-                    // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
+                        // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
                     config.optimization.runtimeChunk('single')
                 }
             )

@@ -12,12 +12,12 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="../../assets//image/userImg.jpeg" class="user-avatar" />
-           <div class="user">您好！{{userForm.name}}</div>
+          <div class="user">您好!{{ userForm.name }}</div>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item> 主页</el-dropdown-item>
+            <el-dropdown-item>主页</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display: block">退出</span>
@@ -41,44 +41,46 @@ export default {
   computed: {
     ...mapGetters(["sidebar", "avatar"]),
   },
-  data () {
+  data() {
     return {
-      userForm:JSON.parse(sessionStorage.getItem('userForm')),
-    }
+      userForm: JSON.parse(sessionStorage.getItem("userForm")),
+    };
   },
-  created () {
-
-  },
-  mounted () {
-    if(this.userForm == undefined){
-      this.$store.dispatch('user/logout', this.loginForm).then(() => {
-            this.$router.push({ path: '/login'})
-          }).catch(() => {
-          })
+  created() {},
+  mounted() {
+    if (this.userForm == undefined) {
+      this.$store
+        .dispatch("user/logout", this.loginForm)
+        .then(() => {
+          this.$router.push({ path: "/login" });
+        })
+        .catch(() => {});
     }
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
-      logout() {
-          this.$confirm('是否确认退出登录吗？?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-              }).  then(async() => {
-              await this.$store.dispatch('user/logout')
-              this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-              this.$message({
-                  type: 'success',
-                  message: '退出成功!'
-              });
-              }).catch(() => {
-              this.$message({
-                  type: 'info',
-                  message: '已取消退出'
-              });
-              });
+    logout() {
+      this.$confirm("是否确认退出登录吗？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          await this.$store.dispatch("user/logout");
+          this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+          this.$message({
+            type: "success",
+            message: "退出成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消退出",
+          });
+        });
     },
   },
 };
@@ -143,7 +145,7 @@ export default {
         margin-top: 5px;
         position: relative;
         display: flex;
-        .user{
+        .user {
           margin-left: 20px;
         }
         .user-avatar {

@@ -1,14 +1,15 @@
 <template>
   <div>
     <div class="textthird">
-      <span>各出入口人次年度统计 </span>
-      <el-select v-model="Typevalue" placeholder="请选择" style="width:20%">
+      <span>各出入口人次年度统计</span>
+      <el-select v-model="Typevalue" placeholder="请选择" style="width: 20%">
         <el-option
           size="small"
           v-for="item in selectData"
           :key="item.id"
           :label="item.name"
-          :value="item.id">
+          :value="item.id"
+        >
         </el-option>
       </el-select>
     </div>
@@ -23,27 +24,27 @@ export default {
 
   data() {
     return {
-      Typevalue:"",
-      labYearlist: "",
-      selectData:[
-        {name:'入口1',id:4},
-        {name:'出口1',id:3},
-        {name:'入口2',id:2},
-        {name:'出口2',id:1},
-      ]
+      Typevalue: "",
+      // labYearlist: "",
+      selectData: [
+        { name: "入口1", id: 4 },
+        { name: "出口1", id: 3 },
+        { name: "入口2", id: 2 },
+        { name: "出口2", id: 1 },
+      ],
     };
   },
- mounted() {
+  mounted() {
     this.drawChart();
   },
   created() {},
 
   methods: {
     drawChart() {
-      // findMonths({qrId:this.Typevalue}).then(res=>{
-      //       //  console.log(res,'数据呢');
-      //        this.arrList = res.data
-      //       })
+      // findMonths({ qrId: this.Typevalue }).then((res) => {
+      //   this.arrList = res.data;
+      //   console.log(res, "数据");
+      // });
       let myEchart = this.$echarts.init(document.getElementById("thmain"));
       let option = {
         legend: {},
@@ -53,17 +54,17 @@ export default {
           source: [
             {
               peoplenum: "一月",
-              总人数: 43,
-              教职工: 85.8,
-              学生: 93,
-              访客: 111,
+              总人数: "",
+              教职工: "",
+              学生: "",
+              访客: "",
             },
             {
               peoplenum: "二月",
-              总人数: 86,
-              教职工: 65,
-              学生: 82,
-              访客: 11,
+              总人数: "",
+              教职工: "",
+              学生: "",
+              访客: "",
             },
             {
               peoplenum: "三月",
@@ -142,14 +143,7 @@ export default {
           { type: "bar" },
         ],
       };
-      // axios.get("/").then((res) => {
-      //   console.log("thirdline访问后台");
-      //   this.labYearlist = res.data.data.labYearlist;
-      //   console.log(this.labYearlist);
-      //   this.option({
-      //     source: [{}],
-      //   });
-      // });
+
       option && myEchart.setOption(option);
     },
   },
@@ -164,7 +158,7 @@ export default {
   justify-content: space-around;
   display: flex;
   width: 100%;
-  span{
+  span {
     width: 70%;
   }
 }

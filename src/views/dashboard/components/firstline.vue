@@ -2,16 +2,20 @@
   <div>
     <div class="textfirst">
       <span>各出入口不同时段人数统计 </span>
-      <el-date-picker
+      <el-time-select
         v-model="Typevalue"
-        type="month"
+        type="hour"
         size="small"
-        placeholder="选择月"
-        @blur =
+        :picker-options="{
+          start: '08:30',
+          step: '02:00',
+          end: '18:30',
+        }"
+        placeholder="选择时间"
       >
-      </el-date-picker>
+      </el-time-select>
     </div>
-    <div id="main" style="width: 105%; height: 400%"></div>
+    <div id="main" style="width: 100%; height: 400%"></div>
   </div>
 </template>
 
@@ -25,12 +29,9 @@ export default {
   data() {
     return {
       Typevalue: "",
-      labList: "",
-      selectValue: "",
       arrList: [],
     };
   },
-
   created() {},
   mounted() {
     this.drawChart();
@@ -41,18 +42,24 @@ export default {
         this.arrList = res.data;
         var totallist = [];
         var total = [];
+        let xData = [];
+        let yData1 = [],
+          yData2 = [],
+          yData3 = [],
+          yData4 = [];
         for (var j = 0; j < this.arrList.length; j++) {
-          for (var i = 0; i < this.arrList[j].difQrMonthVOS.length; i++) {
-            total.push(this.arrList[j].difQrMonthVOS[i].userTotal);
-          }
-
+          this.arrList[j].difDateTimeVOs.forEach((e) => {
+            if (e.pip == "陕职-出口1") yData1.push(e.userTotal);
+            if (e.pip == "陕职-出口2") yData2.push(e.userTotal);
+            if (e.pip == "陕职-入口1") yData3.push(e.userTotal);
+            if (e.pip == "陕职-入口2") yData4.push(e.userTotal);
+          });
           totallist.push(total);
           total = [];
+          xData.push(this.arrList[j].time);
         }
-        console.log(totallist);
         var pip = [];
         var serieslist = [];
-
         for (var i = 0; i < this.arrList.length; i++) {
           var series = {
             name: "",
@@ -60,14 +67,13 @@ export default {
             stack: "Total",
             data: [],
           };
-          pip.push(this.arrList[i].month);
-          series.name = this.arrList[i].month;
+          pip.push(this.arrList[i].hour);
+          series.name = this.arrList[i].hour;
           series.type = "line";
           series.stack = "Total";
           series.data = totallist[i];
           serieslist.push(series);
         }
-    //    console.log(serieslist);
         let myEchart = this.$echarts.init(document.getElementById("main"));
         let option = {
           title: {
@@ -76,7 +82,6 @@ export default {
           tooltip: {
             trigger: "axis",
           },
-
           legend: {
             data: this.pip,
           },
@@ -92,80 +97,40 @@ export default {
           xAxis: {
             type: "category",
             boundaryGap: false,
-            data: [
-              this.arrList[0].difQrMonthVOS[0].typeName,
-              this.arrList[0].difQrMonthVOS[1].typeName,
-              this.arrList[0].difQrMonthVOS[2].typeName,
-              this.arrList[0].difQrMonthVOS[3].typeName,
-              this.arrList[0].difQrMonthVOS[4].typeName,
-              this.arrList[0].difQrMonthVOS[5].typeName,
-            ],
+            data: xData,
           },
           yAxis: {
             type: "value",
           },
           series: serieslist,
-          // series: [
-          //   {
-          //     name: "陕职 - 入口1",
-          //     type: "line",
-          //     stack: "Total",
-          //     data: totallist[0],
-          //   },
-          //   {
-          //     name: "陕职 - 入口1",
-          //     type: "line",
-          //     stack: "Total",
-          //     data: totallist[1],
-          //   },
-          //   //   {
-          //   //     name: 陕职 - 入口2,
-          //   //     type: "line",
-          //   //     stack: "Total",
-          //   //     data: totallist[2],
-          //   //   },
-          //   //   {
-          //   //     name: 陕职 - 出口2,
-          //   //     type: "line",
-          //   //     stack: "Total",
-          //   //     data: totallist[3],
-          //   //   },
-          // ],
+          series: [
+            {
+              name: "陕职 - 入口1",
+              type: "line",
+              stack: "Total",
+              data: yData3,
+            },
+            {
+              name: "陕职 - 出口1",
+              type: "line",
+              stack: "Total",
+              data: yData1,
+            },
+            {
+              name: "陕职 - 入口2",
+              type: "line",
+              stack: "Total",
+              data: yData4,
+            },
+            {
+              name: "陕职 - 出口2",
+              type: "line",
+              stack: "Total",
+              data: yData2,
+            },
+          ],
         };
-        // axios.get("/").then((res) => {
-        //   console.log("firstline访问后台");
-        //   // console.log(res.data);
-        //   this.labList = res.data.data.labList;
-        //   console.log(this.labList);
-        // this.option({
-        //   series: [
-        //     {
-        //       name: "出口1",
-        //       type: "line",
-        //       stack: "Total",
-        //       data: this.labList,
-        //     },
-        //     {
-        //       name: "入口1",
-        //       type: "line",
-        //       stack: "Total",
-        //       data: this.labList,
-        //     },
-        //     {
-        //       name: "出口2",
-        //       type: "line",
-        //       stack: "Total",
-        //       data: this.labList,
-        //     },
-        //     {
-        //       name: "入口2",
-        //       type: "line",
-        //       stack: "Total",
-        //       data: this.labList,
-        //     },
-        //   ],
-        // });
-        console.log(option.series);
+        // console.log(option.series);
         option && myEchart.setOption(option);
       });
     },
